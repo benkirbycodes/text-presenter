@@ -1,6 +1,8 @@
 <template>
   <div class="home">
-    <h1>Yo</h1>
+    <div class="" v-for="message in messages" :key="message._id">
+      <h1>{{ message.text }}</h1>
+    </div>
   </div>
 </template>
 
@@ -8,7 +10,16 @@
 // @ is an alias to /src
 
 export default {
+  mounted() {
+    this.$store.dispatch("getConvos");
+  },
   name: "Home",
+  methods: {},
+  computed: {
+    messages() {
+      return this.$store.state.messages;
+    }
+  },
   components: {}
 };
 </script>
