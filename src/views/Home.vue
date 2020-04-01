@@ -54,6 +54,12 @@ export default {
       this.messageIndex++;
 
       document.getElementById(
+        "insert-user-reply"
+      ).innerHTML = `<div class="bot-frame">${
+        this.userMessages[this.messageIndex]
+      }</div>`;
+
+      document.getElementById(
         "insert-messages"
       ).innerHTML += `<div class="bot-frame">${
         this.botMessages[this.messageIndex]
