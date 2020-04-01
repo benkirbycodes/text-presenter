@@ -20,26 +20,26 @@
 import message from "@/components/Message";
 
 export default {
-  mounted() {
-    this.$store.dispatch("getConvos");
+  async mounted() {
+    await this.$store.dispatch("getConvos");
+
     this.botMessages = this.$store.state.botMessages;
     this.userMessages = this.$store.state.userMessages;
+
     document.getElementById(
       "insert-messages"
     ).innerHTML = `<div class="bot-frame">${
       this.botMessages[this.messageIndex]
     }</div>`;
-    document.getElementById(
-      "insert-user-reply"
-    ).innerHTML = `<div class="bot-frame">${
+    document.getElementById("insert-user-reply").innerHTML = `<p>${
       this.userMessages[this.messageIndex]
-    }</div>`;
+    }</p>`;
   },
   name: "Home",
   data() {
     return {
-      botMessages: this.$store.state.botMessages,
-      userMessages: this.$store.state.userMessages,
+      botMessages: [],
+      userMessages: [],
       messageIndex: 0
     };
   },
@@ -53,11 +53,9 @@ export default {
 
       this.messageIndex++;
 
-      document.getElementById(
-        "insert-user-reply"
-      ).innerHTML = `<div class="bot-frame">${
+      document.getElementById("insert-user-reply").innerHTML = `<p>${
         this.userMessages[this.messageIndex]
-      }</div>`;
+      }</p>`;
 
       document.getElementById(
         "insert-messages"
