@@ -11,9 +11,8 @@ let api = axios.create({
 export default new Vuex.Store({
   state: {
     convo: {},
-    messages: [],
-    printedBotMessages: [],
-    printedUserMessages: []
+    botMessages: [],
+    userMessages: []
   },
   mutations: {
     setResource(state, payload) {
@@ -24,27 +23,24 @@ export default new Vuex.Store({
     async getConvos({ commit, dispatch }) {
       try {
         let res = await api.get("convos");
-        // console.log(res);
-        // let initialBotMessage = [];
-        // initialBotMessage.push(res.data[0].messages.text);
-        // let initialUserMessage = [];
-        // initialUserMessage.push(res.data[1].messages.text);
         commit("setResource", { resource: "convo", data: res.data });
-        commit("setResource", {
-          resource: "messages",
-          data: res.data[0].messages
-        });
-        // commit("setResource", {
-        //   resource: "printedBotMessages",
-        //   data: initialBotMessage
-        // });
-        // commit("setResource", {
-        //   resource: "printedUserMessages",
-        //   data: initialUserMessage
-        // });
+        dispatch("parseMessages");
       } catch (error) {
         console.warn(error.message);
       }
+    },
+    parseMessages({ commit, dispatch }) {
+      let messages = this.state.convo[0].messages;
+      let botMessages = [];
+      let userMessages = [];
+
+      for (let i = 0; i < messages.length; i++) {
+        let m = messages[i];
+        m.role == "Bot" ? botMessages.push(m.text) : userMessages.push(m.text);
+        console.log(botMessages, userMessages);
+      }
+      commit("setResource", { resource: "botMessages", data: botMessages });
+      commit("setResource", { resource: "userMessages", data: userMessages });
     },
     async getConvoById({ commit, dispatch }, id) {
       try {
@@ -53,26 +49,6 @@ export default new Vuex.Store({
       } catch (error) {
         console.warn(error.message);
       }
-    },
-    printMessage({ commit, dispatch }, { messageId, role }) {
-      if ((role = "user")) {
-        let messages = this.state.printedUserMessages;
-        let message = this.state.messages.find(m => (m._id = messageId));
-        messages.push(message);
-        commit("setResource", {
-          resource: "printedUserMessages",
-          data: messages
-        });
-      } else {
-        let messages = this.state.printedBotMessages;
-        let message = this.state.messages.find(m => (m._id = messageId));
-        messages.push(message);
-        commit("setResource", {
-          resource: "printedBotMessages",
-          data: messages
-        });
-      }
     }
-  },
-  modules: {}
+  }
 });

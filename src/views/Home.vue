@@ -4,13 +4,13 @@
       <div id="insert-messages"></div>
     </div>
     <div class="screen-bottom">
-      <div class="user-message"></div>
+      <div id="insert-user-reply" class="user-message"></div>
       <button class="send">
-        <span class="button-text" @click="addMessage('user')">Send</span>
+        <span class="button-text" @click="addMessage()">Send</span>
       </button>
-      <button class="send">
+      <!-- <button class="send">
         <span class="button-text" @click="addMessage('bot')">Bot</span>
-      </button>
+      </button>-->
     </div>
   </div>
 </template>
@@ -22,29 +22,42 @@ import message from "@/components/Message";
 export default {
   mounted() {
     this.$store.dispatch("getConvos");
+    this.botMessages = this.$store.state.botMessages;
+    this.userMessages = this.$store.state.userMessages;
+    document.getElementById(
+      "insert-messages"
+    ).innerHTML = `<div class="bot-frame">${
+      this.botMessages[this.messageIndex]
+    }</div>`;
+    document.getElementById(
+      "insert-user-reply"
+    ).innerHTML = `<div class="bot-frame">${
+      this.userMessages[this.messageIndex]
+    }</div>`;
   },
   name: "Home",
   data() {
     return {
-      messages: []
-      // botTemplate: `<div class="bot-frame">Bot</div>`,
-      // userTemplate: `<div class="user-frame">User</div>`
+      botMessages: this.$store.state.botMessages,
+      userMessages: this.$store.state.userMessages,
+      messageIndex: 0
     };
   },
   methods: {
-    addMessage(role) {
-      let botTemplate;
-      let userTemplate = `<div class="user-frame">User</div>`;
+    addMessage() {
+      document.getElementById(
+        "insert-messages"
+      ).innerHTML += `<div class="user-frame">${
+        this.userMessages[this.messageIndex]
+      }</div>`;
 
-      if (role == "user") {
-        document.getElementById(
-          "insert-messages"
-        ).innerHTML += `<div class="user-frame">User</div>`;
-      } else if (role == "bot") {
-        document.getElementById(
-          "insert-messages"
-        ).innerHTML += `<div class="bot-frame">Bot</div>`;
-      }
+      this.messageIndex++;
+
+      document.getElementById(
+        "insert-messages"
+      ).innerHTML += `<div class="bot-frame">${
+        this.botMessages[this.messageIndex]
+      }</div>`;
     }
   },
   components: {
@@ -82,6 +95,7 @@ body {
   width: 95%;
   background-color: antiquewhite;
   border-radius: 4px;
+  overflow: scroll;
 }
 .screen-bottom {
   width: 95%;
@@ -107,9 +121,9 @@ body {
   width: 35%;
   border: 1px solid grey;
   border-radius: 4px;
-  background-color: green;
+  background-color: white;
   margin: 3px;
-  color: white;
+  color: black;
   justify-content: end;
 }
 .user-frame {
@@ -117,7 +131,7 @@ body {
   width: 35%;
   border: 1px solid grey;
   border-radius: 4px;
-  background-color: blue;
+  background-color: black;
   margin: 3px;
   color: white;
   align-self: flex-end;
