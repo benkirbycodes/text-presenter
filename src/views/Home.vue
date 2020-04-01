@@ -1,14 +1,15 @@
 <template>
   <div class="home">
     <div class="screen-outer-border">
-      <div class v-for="message in messages" :key="message._id">
-        <h1>{{ message.text }}</h1>
-      </div>
+      <div id="insert-messages"></div>
     </div>
     <div class="screen-bottom">
       <div class="user-message"></div>
       <button class="send">
-        <span class="button-text">Send</span>
+        <span class="button-text" @click="addMessage('user')">Send</span>
+      </button>
+      <button class="send">
+        <span class="button-text" @click="addMessage('bot')">Bot</span>
       </button>
     </div>
   </div>
@@ -16,19 +17,39 @@
 
 <script>
 // @ is an alias to /src
+import message from "@/components/Message";
 
 export default {
   mounted() {
     this.$store.dispatch("getConvos");
   },
   name: "Home",
-  methods: {},
-  computed: {
-    messages() {
-      return this.$store.state.messages;
+  data() {
+    return {
+      messages: []
+      // botTemplate: `<div class="bot-frame">Bot</div>`,
+      // userTemplate: `<div class="user-frame">User</div>`
+    };
+  },
+  methods: {
+    addMessage(role) {
+      let botTemplate;
+      let userTemplate = `<div class="user-frame">User</div>`;
+
+      if (role == "user") {
+        document.getElementById(
+          "insert-messages"
+        ).innerHTML += `<div class="user-frame">User</div>`;
+      } else if (role == "bot") {
+        document.getElementById(
+          "insert-messages"
+        ).innerHTML += `<div class="bot-frame">Bot</div>`;
+      }
     }
   },
-  components: {}
+  components: {
+    message
+  }
 };
 </script>
 
@@ -55,6 +76,7 @@ body {
   border: 1px solid grey;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   margin: auto;
   height: 85%;
   width: 95%;
@@ -66,7 +88,6 @@ body {
   height: 12%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   margin: auto;
 }
 .user-message {
@@ -80,5 +101,30 @@ body {
   width: 12.5%;
   background-color: aqua;
   border-radius: 4px;
+}
+.bot-frame {
+  height: 100%;
+  width: 35%;
+  border: 1px solid grey;
+  border-radius: 4px;
+  background-color: green;
+  margin: 3px;
+  color: white;
+  justify-content: end;
+}
+.user-frame {
+  height: 100%;
+  width: 35%;
+  border: 1px solid grey;
+  border-radius: 4px;
+  background-color: blue;
+  margin: 3px;
+  color: white;
+  align-self: flex-end;
+}
+#insert-messages {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 </style>
