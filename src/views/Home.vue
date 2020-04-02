@@ -2,18 +2,21 @@
   <div class="home">
     <div id="screen-scroll" class="screen-outer-border">
       <div id="insert-messages"></div>
-      <div class="typing-holder">
-        <div v-if="botTyping" class="typing">
-          <span class="circle scaling"></span>
-          <span class="circle scaling"></span>
-          <span class="circle scaling"></span>
-        </div>
+    </div>
+    <div class="typing-holder">
+      <div v-if="botTyping" class="typing">
+        <span class="circle scaling"></span>
+        <span class="circle scaling"></span>
+        <span class="circle scaling"></span>
       </div>
     </div>
     <div class="screen-bottom">
       <div id="insert-user-reply" class="user-message"></div>
-      <button class="send">
+      <button v-if="!botTyping" class="send">
         <span class="button-text" @click="updateMessages()">Send</span>
+      </button>
+      <button v-if="botTyping" class="send">
+        <span class="button-text">Send</span>
       </button>
     </div>
   </div>
@@ -44,6 +47,7 @@ export default {
       this.clearReply();
       this.incrementMessageIndex();
       this.flipBotTypingBool();
+      this.updateScroll();
       setTimeout(() => {
         this.flipBotTypingBool();
         this.populateReply();
@@ -107,20 +111,20 @@ body {
   height: 667px;
   width: 375px;
   margin: auto;
-  justify-content: space-between;
+  justify-content: flex-start;
   background-color: grey;
   padding-top: 3%;
+  border-radius: 4px;
+  border: 4px solid lightgray;
 }
 .screen-outer-border {
-  border: 1px solid grey;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   margin: auto;
-  height: 85%;
+  height: 75%;
   width: 95%;
-  background-color: antiquewhite;
-  border-radius: 4px;
+  /* border-radius: 4px 4px 0px 0px; */
   overflow: scroll;
 }
 .screen-bottom {
@@ -133,19 +137,23 @@ body {
 .user-message {
   width: 87%;
   height: 90%;
-  background-color: antiquewhite;
+  border: 1px solid lightgray;
   border-radius: 4px;
   display: flex;
   flex-direction: row;
   justify-content: left;
+  color: white;
 }
 .send {
-  height: 90%;
+  height: 92%;
   width: 12.5%;
-  background-color: aqua;
   border-radius: 4px;
   margin-left: 2px;
+  background-color: grey;
+  border: 1px solid lightgray;
+  color: white;
 }
+
 .bot-frame {
   height: 100%;
   width: 35%;
@@ -175,8 +183,8 @@ body {
 }
 .typing-holder {
   height: 8%;
-  width: 100%;
-  align-self: end;
+  width: 95%;
+  margin: auto;
 }
 .typing {
   display: block;
