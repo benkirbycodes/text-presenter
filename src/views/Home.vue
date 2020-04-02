@@ -12,8 +12,8 @@
     </div>
     <div class="screen-bottom">
       <div id="insert-user-reply" class="user-message"></div>
-      <button v-if="!botTyping" class="send">
-        <span class="button-text" @click="updateMessages()">Send</span>
+      <button v-if="!botTyping" @click="updateMessages()" class="send">
+        <span class="button-text">Send</span>
       </button>
       <button v-if="botTyping" class="send">
         <span class="button-text">Send</span>
@@ -30,7 +30,6 @@ export default {
     this.userMessages = this.$store.state.userMessages;
     this.updateBotMessage();
     this.populateReply();
-    this.incrementMessageIndex();
   },
   name: "Home",
   data() {
@@ -43,17 +42,23 @@ export default {
   },
   methods: {
     updateMessages() {
-      this.updateUserMessage();
-      this.clearReply();
-      this.incrementMessageIndex();
-      this.flipBotTypingBool();
-      this.updateScroll();
-      setTimeout(() => {
+      if (this.messageIndex < this.botMessages.length - 1) {
+        this.updateUserMessage();
+        this.clearReply();
+        this.incrementMessageIndex();
         this.flipBotTypingBool();
-        this.populateReply();
-        this.updateBotMessage();
         this.updateScroll();
-      }, 2000);
+        setTimeout(() => {
+          this.flipBotTypingBool();
+          this.populateReply();
+          this.updateBotMessage();
+          this.updateScroll();
+        }, 2000);
+      } else {
+        this.updateUserMessage();
+        this.clearReply();
+        this.updateScroll();
+      }
     },
     flipBotTypingBool() {
       this.botTyping = !this.botTyping;
@@ -124,7 +129,6 @@ body {
   margin: auto;
   height: 75%;
   width: 95%;
-  /* border-radius: 4px 4px 0px 0px; */
   overflow: scroll;
 }
 .screen-bottom {
@@ -137,35 +141,36 @@ body {
 .user-message {
   width: 87%;
   height: 90%;
-  border: 1px solid lightgray;
+  border: 2px solid lightgray;
   border-radius: 4px;
   display: flex;
   flex-direction: row;
   justify-content: left;
   color: white;
+  overflow: scroll;
 }
 .send {
-  height: 92%;
+  height: 94%;
   width: 12.5%;
   border-radius: 4px;
   margin-left: 2px;
   background-color: grey;
-  border: 1px solid lightgray;
+  border: 2px solid lightgray;
   color: white;
 }
 
 .bot-frame {
-  height: 100%;
-  width: 35%;
+  padding: 4px;
+  max-width: 45%;
   border: 1px solid grey;
   border-radius: 10px 10px 10px 0px;
   background-color: white;
   margin: 3px;
   color: black;
-  justify-content: end;
 }
 .user-frame {
-  width: 35%;
+  padding: 4px;
+  max-width: 45%;
   border: 1px solid grey;
   border-radius: 10px 10px 0px 10px;
   background-color: black;

@@ -38,7 +38,6 @@ export default new Vuex.Store({
       for (let i = 0; i < messages.length; i++) {
         let m = messages[i];
         m.role == "Bot" ? botMessages.push(m.text) : userMessages.push(m.text);
-        console.log(botMessages, userMessages);
       }
       commit("setResource", { resource: "botMessages", data: botMessages });
       commit("setResource", { resource: "userMessages", data: userMessages });
