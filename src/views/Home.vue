@@ -20,6 +20,7 @@ export default {
     this.userMessages = this.$store.state.userMessages;
     this.updateBotMessage();
     this.populateReply();
+    this.incrementMessageIndex();
   },
   name: "Home",
   data() {
