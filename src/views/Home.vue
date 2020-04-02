@@ -2,6 +2,13 @@
   <div class="home">
     <div id="screen-scroll" class="screen-outer-border">
       <div id="insert-messages"></div>
+      <div class="typing-holder">
+        <div v-if="botTyping" class="typing">
+          <span class="circle scaling"></span>
+          <span class="circle scaling"></span>
+          <span class="circle scaling"></span>
+        </div>
+      </div>
     </div>
     <div class="screen-bottom">
       <div id="insert-user-reply" class="user-message"></div>
@@ -27,16 +34,25 @@ export default {
     return {
       botMessages: [],
       userMessages: [],
-      messageIndex: 0
+      messageIndex: 0,
+      botTyping: false
     };
   },
   methods: {
     updateMessages() {
       this.updateUserMessage();
+      this.clearReply();
       this.incrementMessageIndex();
-      this.populateReply();
-      this.updateBotMessage();
-      this.updateScroll();
+      this.flipBotTypingBool();
+      setTimeout(() => {
+        this.flipBotTypingBool();
+        this.populateReply();
+        this.updateBotMessage();
+        this.updateScroll();
+      }, 2000);
+    },
+    flipBotTypingBool() {
+      this.botTyping = !this.botTyping;
     },
     updateUserMessage() {
       document.getElementById(
@@ -58,6 +74,11 @@ export default {
       ).innerHTML = `<p class="reply">${
         this.userMessages[this.messageIndex]
       }</p>`;
+    },
+    clearReply() {
+      document.getElementById(
+        "insert-user-reply"
+      ).innerHTML = `<p class="reply"></p>`;
     },
     incrementMessageIndex() {
       this.messageIndex++;
@@ -129,7 +150,7 @@ body {
   height: 100%;
   width: 35%;
   border: 1px solid grey;
-  border-radius: 4px;
+  border-radius: 10px 10px 10px 0px;
   background-color: white;
   margin: 3px;
   color: black;
@@ -138,7 +159,7 @@ body {
 .user-frame {
   width: 35%;
   border: 1px solid grey;
-  border-radius: 4px;
+  border-radius: 10px 10px 0px 10px;
   background-color: black;
   margin: 3px;
   color: white;
@@ -151,5 +172,58 @@ body {
 }
 .reply {
   margin-left: 2px;
+}
+.typing-holder {
+  height: 8%;
+  width: 100%;
+  align-self: end;
+}
+.typing {
+  display: block;
+  width: 60px;
+  height: 40px;
+  background-color: #bdbdbd;
+  margin-left: 20px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.circle.scaling {
+  animation: typing 1000ms ease-in-out infinite;
+  animation-delay: 3600ms;
+}
+.circle {
+  display: block;
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  background-color: #757575;
+  margin: 3px;
+}
+.circle:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.circle:nth-child(2) {
+  animation-delay: 333ms;
+}
+
+.circle:nth-child(3) {
+  animation-delay: 666ms;
+}
+@keyframes typing {
+  0% {
+    transform: scale(1);
+  }
+  33% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

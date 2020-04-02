@@ -29,6 +29,7 @@ export default new Vuex.Store({
         console.error(error.message);
       }
     },
+    // Parses received convo into bot and user arrays
     parseMessages({ commit, dispatch }) {
       let messages = this.state.convo[0].messages;
       let botMessages = [];
