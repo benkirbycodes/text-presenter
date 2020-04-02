@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <div class="screen-outer-border">
+    <div id="screen-scroll" class="screen-outer-border">
       <div id="insert-messages"></div>
     </div>
     <div class="screen-bottom">
@@ -62,6 +62,12 @@ export default {
       ).innerHTML += `<div class="bot-frame">${
         this.botMessages[this.messageIndex]
       }</div>`;
+
+      this.updateScroll();
+    },
+    updateScroll() {
+      let element = document.getElementById("screen-scroll");
+      element.scrollTop = element.scrollHeight;
     }
   },
   components: {
@@ -135,7 +141,6 @@ body {
   justify-content: end;
 }
 .user-frame {
-  height: 100%;
   width: 35%;
   border: 1px solid grey;
   border-radius: 4px;
