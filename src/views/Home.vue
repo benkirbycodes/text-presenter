@@ -6,7 +6,7 @@
     <div class="screen-bottom">
       <div id="insert-user-reply" class="user-message"></div>
       <button class="send">
-        <span class="button-text" @click="addMessage()">Send</span>
+        <span class="button-text" @click="updateMessage()">Send</span>
       </button>
     </div>
   </div>
@@ -42,28 +42,37 @@ export default {
     };
   },
   methods: {
-    addMessage() {
+    updateMessage() {
       document.getElementById(
         "insert-messages"
       ).innerHTML += `<div class="user-frame">${
         this.userMessages[this.messageIndex]
       }</div>`;
 
-      this.messageIndex++;
+      this.incrementMessageIndex();
 
-      document.getElementById(
-        "insert-user-reply"
-      ).innerHTML = `<p class="reply">${
-        this.userMessages[this.messageIndex]
-      }</p>`;
+      this.populateReply();
 
+      this.updateBotMessage();
+
+      this.updateScroll();
+    },
+    updateBotMessage() {
       document.getElementById(
         "insert-messages"
       ).innerHTML += `<div class="bot-frame">${
         this.botMessages[this.messageIndex]
       }</div>`;
-
-      this.updateScroll();
+    },
+    populateReply() {
+      document.getElementById(
+        "insert-user-reply"
+      ).innerHTML = `<p class="reply">${
+        this.userMessages[this.messageIndex]
+      }</p>`;
+    },
+    incrementMessageIndex() {
+      this.messageIndex++;
     },
     updateScroll() {
       let element = document.getElementById("screen-scroll");
