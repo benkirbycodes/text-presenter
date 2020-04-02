@@ -6,32 +6,20 @@
     <div class="screen-bottom">
       <div id="insert-user-reply" class="user-message"></div>
       <button class="send">
-        <span class="button-text" @click="updateMessage()">Send</span>
+        <span class="button-text" @click="updateMessages()">Send</span>
       </button>
     </div>
   </div>
 </template>
 
 <script>
-import message from "@/components/Message";
-
 export default {
   async mounted() {
     await this.$store.dispatch("getConvos");
-
     this.botMessages = this.$store.state.botMessages;
     this.userMessages = this.$store.state.userMessages;
-
-    document.getElementById(
-      "insert-messages"
-    ).innerHTML = `<div class="bot-frame">${
-      this.botMessages[this.messageIndex]
-    }</div>`;
-    document.getElementById(
-      "insert-user-reply"
-    ).innerHTML = `<p class="reply">${
-      this.userMessages[this.messageIndex]
-    }</p>`;
+    this.updateBotMessage();
+    this.populateReply();
   },
   name: "Home",
   data() {
@@ -42,20 +30,19 @@ export default {
     };
   },
   methods: {
-    updateMessage() {
+    updateMessages() {
+      this.updateUserMessage();
+      this.incrementMessageIndex();
+      this.populateReply();
+      this.updateBotMessage();
+      this.updateScroll();
+    },
+    updateUserMessage() {
       document.getElementById(
         "insert-messages"
       ).innerHTML += `<div class="user-frame">${
         this.userMessages[this.messageIndex]
       }</div>`;
-
-      this.incrementMessageIndex();
-
-      this.populateReply();
-
-      this.updateBotMessage();
-
-      this.updateScroll();
     },
     updateBotMessage() {
       document.getElementById(
@@ -79,9 +66,7 @@ export default {
       element.scrollTop = element.scrollHeight;
     }
   },
-  components: {
-    message
-  }
+  components: {}
 };
 </script>
 

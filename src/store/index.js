@@ -26,7 +26,7 @@ export default new Vuex.Store({
         commit("setResource", { resource: "convo", data: res.data });
         dispatch("parseMessages");
       } catch (error) {
-        console.warn(error.message);
+        console.error(error.message);
       }
     },
     parseMessages({ commit, dispatch }) {
@@ -42,12 +42,14 @@ export default new Vuex.Store({
       commit("setResource", { resource: "botMessages", data: botMessages });
       commit("setResource", { resource: "userMessages", data: userMessages });
     },
+    //this method not currently used, but will be useful if future versions have multiple convo options
     async getConvoById({ commit, dispatch }, id) {
       try {
         let res = await api.get("convos/" + id);
         commit("setResource", { resource: "convo", data: res.data });
+        dispatch("parseMessages");
       } catch (error) {
-        console.warn(error.message);
+        console.error(error.message);
       }
     }
   }
