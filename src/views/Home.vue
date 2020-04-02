@@ -8,15 +8,11 @@
       <button class="send">
         <span class="button-text" @click="addMessage()">Send</span>
       </button>
-      <!-- <button class="send">
-        <span class="button-text" @click="addMessage('bot')">Bot</span>
-      </button>-->
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 import message from "@/components/Message";
 
 export default {
@@ -31,7 +27,9 @@ export default {
     ).innerHTML = `<div class="bot-frame">${
       this.botMessages[this.messageIndex]
     }</div>`;
-    document.getElementById("insert-user-reply").innerHTML = `<p>${
+    document.getElementById(
+      "insert-user-reply"
+    ).innerHTML = `<p class="reply">${
       this.userMessages[this.messageIndex]
     }</p>`;
   },
@@ -53,7 +51,9 @@ export default {
 
       this.messageIndex++;
 
-      document.getElementById("insert-user-reply").innerHTML = `<p>${
+      document.getElementById(
+        "insert-user-reply"
+      ).innerHTML = `<p class="reply">${
         this.userMessages[this.messageIndex]
       }</p>`;
 
@@ -113,12 +113,16 @@ body {
   height: 90%;
   background-color: antiquewhite;
   border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
 }
 .send {
   height: 90%;
   width: 12.5%;
   background-color: aqua;
   border-radius: 4px;
+  margin-left: 2px;
 }
 .bot-frame {
   height: 100%;
@@ -144,5 +148,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+}
+.reply {
+  margin-left: 2px;
 }
 </style>
