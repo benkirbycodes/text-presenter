@@ -17,7 +17,7 @@ class ConvoService {
     try {
       return await _repo.create(newConvo);
     } catch (error) {
-      console.error(error);
+      throw new Error(error);
     }
   }
   async edit(id, update) {
