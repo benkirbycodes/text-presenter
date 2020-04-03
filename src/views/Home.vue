@@ -41,23 +41,29 @@ export default {
     };
   },
   methods: {
+    //This method handles user button clicks
     updateMessages() {
       if (this.messageIndex < this.botMessages.length - 1) {
         this.updateUserMessage();
         this.clearReply();
         this.incrementMessageIndex();
-        this.flipBotTypingBool();
-        this.updateScroll();
         setTimeout(() => {
           this.flipBotTypingBool();
-          this.populateReply();
-          this.updateBotMessage();
           this.updateScroll();
-        }, 2000);
-      } else {
+          setTimeout(() => {
+            this.flipBotTypingBool();
+            this.populateReply();
+            this.updateBotMessage();
+            this.updateScroll();
+          }, 2000);
+        }, 1000);
+      } else if (this.messageIndex == this.botMessages.length - 1) {
         this.updateUserMessage();
         this.clearReply();
         this.updateScroll();
+        this.incrementMessageIndex();
+      } else {
+        this.clearReply();
       }
     },
     flipBotTypingBool() {
