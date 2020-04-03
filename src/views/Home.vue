@@ -45,6 +45,7 @@ export default {
     updateMessages() {
       if (this.messageIndex < this.botMessages.length - 1) {
         this.updateUserMessage();
+        this.updateScroll();
         this.clearReply();
         this.incrementMessageIndex();
         setTimeout(() => {
